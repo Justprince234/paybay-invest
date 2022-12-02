@@ -2,7 +2,7 @@ from django.urls import path
 from knox import views as knox_views
 from account import views
 from account.views import ContactList
-from core.views import DepositList, TenorList, CommodityList, dashboard_api_view, BankList, WithdrawAPIView, CryptoList, WithdrawBankList, ItemsList
+from core.views import DepositList, TenorList, CommodityList, dashboard_api_view, BankList, withdraw_api_view, CryptoList, WithdrawBankList, ItemsList
 
 urlpatterns = [
     path('register/', views.RegisterAPI.as_view(), name='register'),
@@ -16,7 +16,7 @@ urlpatterns = [
     path('dashboard/', dashboard_api_view),
     path('bank/', BankList.as_view()),
     path('items/', ItemsList.as_view()),
-    path('withdraw/', WithdrawAPIView.as_view()),
+    path('withdraw/', withdraw_api_view),
     path('crypto/', CryptoList.as_view()),
     path('withdrawbank/', WithdrawBankList.as_view()),
     path('deposit/', DepositList.as_view()),

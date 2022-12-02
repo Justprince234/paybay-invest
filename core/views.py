@@ -26,16 +26,18 @@ def dashboard_api_view(request):
     
     if request.method == 'GET':
         items = Dashboard.objects.filter(owner=request.user,)
-        serializer = DashboardSerializer(items, many=True)
+        context = {"request": request}
+        serializer = DashboardSerializer(items, context=context, many=True)
         return JsonResponse(serializer.data, safe =False)
     
     elif request.method == 'POST':
         owner = request.user
         data = JSONParser().parse(request)
-        serializer =DashboardSerializer(data = data)
+        context = {"request": request}
+        serializer =DashboardSerializer(data=data, context=context )
  
         if serializer.is_valid():
-            serializer.save(owner)
+            serializer.save(owner=owner)
             return JsonResponse(serializer.data,status =201)
         return JsonResponse(serializer.errors,status = 400)
 
@@ -47,32 +49,30 @@ class ItemsList(generics.ListCreateAPIView):
     queryset = Items.objects.all()
     serializer_class = ItemsSerializer
 
-class WithdrawAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated,]
-    serializer_class = WithdrawSerializer
-
-    def get(self, request, *args, **kwargs):
-        items = Withdraw.objects.filter(owner=self.request.user,)
+@api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
+def withdraw_api_view(request):
+    
+    if request.method == 'GET':
+        items = Withdraw.objects.filter(owner=request.user,)
         context = {"request": request}
-        serializer = WithdrawSerializer(items, context=context, many=True) 
+        serializer = WithdrawSerializer(items, context=context, many=True)
         return JsonResponse(serializer.data, safe =False)
-
-    def post(self, request, *args, **kwargs):
-        profile_value =Dashboard.objects.get(owner=self.request.user,).profile_value
-        dashboard = Dashboard.objects.filter(owner=self.request.user,)
+    
+    elif request.method == 'POST':
+        owner = request.user
+        profile_value =Dashboard.objects.get(owner=owner,).profile_value
+        dashboard = Dashboard.objects.filter(owner=owner,)
+        data = JSONParser().parse(request)
         context = {"request": request}
-        serializer = WithdrawSerializer(data=request.data, context=context) 
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-            user.save()
-
+        serializer =WithdrawSerializer(data=data, context=context )
+ 
+        if serializer.is_valid():
+            serializer.save(owner=owner)
             profile_value -= serializer.validated_data['amount']
             dashboard.update(profile_value=profile_value)
-
-        return Response({
-            "status": "Transaction successful",
-            "user": WithdrawSerializer(serializer.validated_data).data
-            })
+            return JsonResponse(serializer.data,status =201)
+        return JsonResponse(serializer.errors,status = 400)
 
 class CryptoList(generics.ListCreateAPIView):
     queryset = Crypto.objects.all()
