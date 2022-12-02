@@ -47,7 +47,6 @@ class Dashboard(models.Model):
 
 class Withdraw(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='withdraw', on_delete=models.CASCADE)
-    dashboard = models.ForeignKey(Dashboard, related_name='dashboard', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     account  = models.IntegerField()
     amount = models.IntegerField()

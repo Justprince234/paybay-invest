@@ -57,12 +57,15 @@ class WithdrawAPIView(APIView):
         return JsonResponse(serializer.data, safe =False)
 
     def post(self, request, *args, **kwargs):
+        profile_value =Dashboard.objects.get(owner=self.request.user,).profile_value
+        dashboard = Dashboard.objects.filter(owner=self.request.user,)
         serializer = WithdrawSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
+            user.save()
 
-            user.dashboard.profile_value -= serializer.validated_data['amount']
-            user.dashboard.save()
+            profile_value -= serializer.validated_data['amount']
+            dashboard.update(profile_value=profile_value)
 
         return Response({
             "status": "Transaction successful",

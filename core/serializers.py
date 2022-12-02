@@ -31,7 +31,6 @@ class DashboardSerializer(serializers.ModelSerializer):
 
 class WithdrawSerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
-    dashboard = DashboardSerializer(many=True)
     class Meta:
         model = Withdraw
         fields = '__all__'
