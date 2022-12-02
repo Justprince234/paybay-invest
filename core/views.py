@@ -58,6 +58,7 @@ class WithdrawAPIView(APIView):
         return JsonResponse(serializer.data, safe =False)
 
     def post(self, request, *args, **kwargs):
+        user = self.context['request'].user
         profile_value =Dashboard.objects.get(owner=user,).profile_value
         dashboard = Dashboard.objects.filter(owner=user,)
         serializer = WithdrawSerializer(data=request.data, context={'request':request}) 
