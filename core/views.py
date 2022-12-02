@@ -59,7 +59,7 @@ class WithdrawAPIView(APIView):
     def post(self, request, *args, **kwargs):
         profile_value =Dashboard.objects.get(owner=self.request.user,).profile_value
         dashboard = Dashboard.objects.filter(owner=self.request.user,)
-        serializer = WithdrawSerializer(data=request.data)
+        serializer = WithdrawSerializer(data=request.data, context={'request':request}) 
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             user.save()
