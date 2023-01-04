@@ -1,12 +1,13 @@
 from django.urls import path
 from knox import views as knox_views
 from account import views
-from account.views import ContactList
+from account.views import ContactList, ChangePasswordView
 from core.views import DepositList, TenorList, CommodityList, dashboard_api_view, BankList, withdraw_api_view, CryptoList, WithdrawBankList, ItemsList
 
 urlpatterns = [
     path('register/', views.RegisterAPI.as_view(), name='register'),
     path('login/', views.LoginAPIView.as_view(), name='login'),
+    path('change-password/<int:pk>/', ChangePasswordView.as_view(), name='auth_change_password'),
     path('contact/', views.ContactList.as_view(), name='contact'),
     path('logout/', knox_views.LogoutView.as_view(), name='logout'),
     path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
