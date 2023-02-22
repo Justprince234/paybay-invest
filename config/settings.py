@@ -97,8 +97,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'obongpython$paybay',
+        'USER': 'obongpython',
+        'PASSWORD': 'Father1990',
+        'HOST': 'obongpython.mysql.pythonanywhere-services.com'
     }
 }
 
