@@ -18,6 +18,8 @@ django-rest-knox = "*"
 django-heroku = "*"
 django-cors-headers = "*"
 boto3 = "*"
+python-dotenv = "*"
+dj-database-url = "*"
 
 [dev-packages]
 
